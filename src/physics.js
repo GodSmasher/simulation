@@ -1,4 +1,7 @@
 // src/physics.js
+// src/physics.js
+
+// Berechnet die Ableitungen (dθ/dt und dω/dt) für das Doppelpendel
 export function derivatives(state, params) {
     const { theta1, theta2, omega1, omega2 } = state;
     const { L1, L2, m1, m2, g } = params;
@@ -7,15 +10,19 @@ export function derivatives(state, params) {
     const denominator1 = (m1 + m2) * L1 - m2 * L1 * Math.cos(delta) * Math.cos(delta);
     const denominator2 = (L2 / L1) * denominator1;
     
-    const domega1 = (m2 * L1 * omega1 * omega1 * Math.sin(delta) * Math.cos(delta) +
-                      m2 * g * Math.sin(theta2) * Math.cos(delta) +
-                      m2 * L2 * omega2 * omega2 * Math.sin(delta) -
-                      (m1 + m2) * g * Math.sin(theta1)) / denominator1;
+    const domega1 = (
+      m2 * L1 * omega1 * omega1 * Math.sin(delta) * Math.cos(delta) +
+      m2 * g * Math.sin(theta2) * Math.cos(delta) +
+      m2 * L2 * omega2 * omega2 * Math.sin(delta) -
+      (m1 + m2) * g * Math.sin(theta1)
+    ) / denominator1;
     
-    const domega2 = (-m2 * L2 * omega2 * omega2 * Math.sin(delta) * Math.cos(delta) +
-                      (m1 + m2) * (g * Math.sin(theta1) * Math.cos(delta) -
-                      L1 * omega1 * omega1 * Math.sin(delta) -
-                      g * Math.sin(theta2))) / denominator2;
+    const domega2 = (
+      -m2 * L2 * omega2 * omega2 * Math.sin(delta) * Math.cos(delta) +
+      (m1 + m2) * (g * Math.sin(theta1) * Math.cos(delta) -
+      L1 * omega1 * omega1 * Math.sin(delta) -
+      g * Math.sin(theta2))
+    ) / denominator2;
     
     return {
       dtheta1: omega1,
