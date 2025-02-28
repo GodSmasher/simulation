@@ -1,7 +1,9 @@
+
 // src/DoublePendulumScene.jsx
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import useDoublePendulumPhysics from './useDoublePendulumPhysics';
 
 function DoublePendulum({ parameters }) {
@@ -16,6 +18,8 @@ function DoublePendulum({ parameters }) {
   
   const rod1Ref = useRef();
   const rod2Ref = useRef();
+  const emissiveIntensity1 = Math.abs(Math.sin(theta1));
+  const emissiveIntensity2 = Math.abs(Math.sin(theta2));
   
   useFrame(() => {
     if (rod1Ref.current) {
@@ -29,24 +33,43 @@ function DoublePendulum({ parameters }) {
   
   return (
     <group>
+      {/* Erstes Pendel: Stab und Kugel */}
       <group ref={rod1Ref}>
         <mesh>
           <cylinderGeometry args={[0.05, 0.05, L1, 16]} />
-          <meshStandardMaterial color="hotpink" />
+          <meshStandardMaterial 
+            color="hotpink" 
+            emissive="hotpink" 
+            emissiveIntensity={emissiveIntensity1} 
+          />
         </mesh>
         <mesh position={[L1, 0, 0]}>
           <sphereGeometry args={[0.15, 16, 16]} />
-          <meshStandardMaterial color="orange" />
+          <meshStandardMaterial 
+            color="orange" 
+            emissive="orange" 
+            emissiveIntensity={emissiveIntensity1} 
+          />
         </mesh>
       </group>
+      
+      {/* Zweites Pendel, angehängt an das erste */}
       <group ref={rod2Ref}>
         <mesh>
           <cylinderGeometry args={[0.05, 0.05, L2, 16]} />
-          <meshStandardMaterial color="skyblue" />
+          <meshStandardMaterial 
+            color="skyblue" 
+            emissive="skyblue" 
+            emissiveIntensity={emissiveIntensity2} 
+          />
         </mesh>
         <mesh position={[L2, 0, 0]}>
           <sphereGeometry args={[0.15, 16, 16]} />
-          <meshStandardMaterial color="limegreen" />
+          <meshStandardMaterial 
+            color="limegreen" 
+            emissive="limegreen" 
+            emissiveIntensity={emissiveIntensity2} 
+          />
         </mesh>
       </group>
     </group>
@@ -60,6 +83,15 @@ export default function DoublePendulumScene({ parameters }) {
       <directionalLight position={[10, 10, 10]} />
       <OrbitControls />
       <DoublePendulum parameters={parameters} />
+      {/* Post-Processing: Bloom-Effekt */}
+      <EffectComposer>
+        <Bloom 
+          luminanceThreshold={0.2} 
+          luminanceSmoothing={0.9} 
+          intensity={1.5} 
+        />
+      </EffectComposer>
     </Canvas>
   );
 }
+
