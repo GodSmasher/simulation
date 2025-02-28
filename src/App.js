@@ -1,16 +1,12 @@
-// src/App.js
+// src/App.test.js
 import React from 'react';
-import './App.css';
-import MyChart from './MyChart';
+import { render, screen } from '@testing-library/react';
+import App from './App';
 
-function App() {
-  return (
-    <div className="App">
-      <h1>Meine React App mit Chart.js</h1>
-      <MyChart />
-    </div>
-  );
-}
+test('renders heading', () => {
+  render(<App />);
+  const headingElement = screen.getByText(/Meine React App mit Chart.js/i);
+  expect(headingElement).toBeInTheDocument();
+});
 
-export default App;
 
