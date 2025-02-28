@@ -18,12 +18,19 @@ function DoublePendulum({ parameters, onAngleUpdate }) {
   const rod1Ref = useRef();
   const rod2Ref = useRef();
   const bob1Ref = useRef(); 
+  const [dragging, setDragging] = useState(false);
   const { camera, gl, scene } = useThree();
-  const bindDrag = useDrag(({ offset: [x, y] }) => {
-    const newTheta1 = Math.atan2(y, x);
-    if (onAngleUpdate) {
+  const bindDrag = useDrag(({ offset: [x, y], first, last }) => {
+    if (first) {
+      setDragging(true);
+    }
+    if (last) {
+      setDragging(false);
+      const newTheta1 = Math.atan2(y, x);
+      if (onAngleUpdate) {
       onAngleUpdate(newTheta1);
     }
+   }
   }, { pointerEvents: true, from: () => [0, 0] });
 
   useFrame(() => {

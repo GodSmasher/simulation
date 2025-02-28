@@ -1,9 +1,8 @@
-// src/useDoublePendulumPhysics.js
 import { useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { rk4 } from './physics';
 
-export default function useDoublePendulumPhysics(initialTheta1 = 0, initialTheta2 = 0) {
+export default function useDoublePendulumPhysics(initialTheta1 = 0, initialTheta2 = 0, paused = false) {
   const dt = 0.02;
   const params = {
     L1: 2,
@@ -21,8 +20,11 @@ export default function useDoublePendulumPhysics(initialTheta1 = 0, initialTheta
   });
   
   useFrame(() => {
-    setState(prevState => rk4(prevState, dt, params));
+    if (!paused) {
+      setState(prevState => rk4(prevState, dt, params));
+    }
   });
   
   return { theta1: state.theta1, theta2: state.theta2 };
 }
+
