@@ -3,10 +3,9 @@ import React, { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 
-
-function useDoublePendulumPhysics() {
-  const [theta1, setTheta1] = useState(0);
-  const [theta2, setTheta2] = useState(0);
+function useDoublePendulumPhysics(initialTheta1 = 0, initialTheta2 = 0) {
+  const [theta1, setTheta1] = useState(initialTheta1);
+  const [theta2, setTheta2] = useState(initialTheta2);
   
   useFrame(() => {
     setTheta1(prev => prev + 0.01);
@@ -16,13 +15,17 @@ function useDoublePendulumPhysics() {
   return { theta1, theta2 };
 }
 
-function DoublePendulum() {
-  const { theta1, theta2 } = useDoublePendulumPhysics();
+function DoublePendulum({ parameters }) {
+  // Verwende die übergebenen Parameter oder Standardwerte
+  const {
+    L1 = 2,
+    L2 = 2,
+    theta1: initialTheta1 = 0,
+    theta2: initialTheta2 = 0,
+  } = parameters || {};
   
-
-  const L1 = 2;
-  const L2 = 2;
-
+  const { theta1, theta2 } = useDoublePendulumPhysics(initialTheta1, initialTheta2);
+  
   const rod1Ref = useRef();
   const rod2Ref = useRef();
   
@@ -44,7 +47,6 @@ function DoublePendulum() {
           <cylinderGeometry args={[0.05, 0.05, L1, 16]} />
           <meshStandardMaterial color="hotpink" />
         </mesh>
-        {/* Kugel am Ende */}
         <mesh position={[L1, 0, 0]}>
           <sphereGeometry args={[0.15, 16, 16]} />
           <meshStandardMaterial color="orange" />
@@ -66,13 +68,14 @@ function DoublePendulum() {
   );
 }
 
-export default function DoublePendulumScene() {
+export default function DoublePendulumScene({ parameters }) {
   return (
     <Canvas camera={{ position: [5, 5, 5], fov: 50 }}>
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 10]} />
       <OrbitControls />
-      <DoublePendulum />
+      <DoublePendulum parameters={parameters} />
     </Canvas>
   );
 }
+
