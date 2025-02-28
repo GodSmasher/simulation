@@ -76,22 +76,6 @@ function DoublePendulum({ parameters }) {
   );
 }
 
-export default function DoublePendulumScene({ parameters }) {
-  return (
-    <Canvas camera={{ position: [5, 5, 5], fov: 50 }}>
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 10]} />
-      <OrbitControls />
-      <DoublePendulum parameters={parameters} />
-      {/* Post-Processing: Bloom-Effekt */}
-      <EffectComposer>
-        <Bloom 
-          luminanceThreshold={0.2} 
-          luminanceSmoothing={0.9} 
-          intensity={1.5} 
-        />
-      </EffectComposer>
-    </Canvas>
-  );
-}
+
+
 
