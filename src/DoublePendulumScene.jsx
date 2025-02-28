@@ -1,11 +1,11 @@
 // src/DoublePendulumScene.jsx
-import React, { useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import React, { useRef, useState } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import { useDrag } from '@use-gesture/react';
 import useDoublePendulumPhysics from './useDoublePendulumPhysics';
 
-function DoublePendulum({ parameters }) {
-  // Verwende die übergebenen Parameter oder Standardwerte
+function DoublePendulum({ parameters, onAngleUpdate }) {
   const {
     L1 = 2,
     L2 = 2,
@@ -13,12 +13,19 @@ function DoublePendulum({ parameters }) {
     theta2: initialTheta2 = 0,
   } = parameters || {};
 
-  // Jetzt nutzen wir den Custom Hook, der die echte Physik integriert
   const { theta1, theta2 } = useDoublePendulumPhysics(initialTheta1, initialTheta2);
   
   const rod1Ref = useRef();
   const rod2Ref = useRef();
-  
+  const bob1Ref = useRef(); 
+  const { camera, gl, scene } = useThree();
+  const bindDrag = useDrag(({ offset: [x, y] }) => {
+    const newTheta1 = Math.atan2(y, x);
+    if (onAngleUpdate) {
+      onAngleUpdate(newTheta1);
+    }
+  }, { pointerEvents: true, from: () => [0, 0] });
+
   useFrame(() => {
     if (rod1Ref.current) {
       rod1Ref.current.rotation.z = theta1;
@@ -37,9 +44,14 @@ function DoublePendulum({ parameters }) {
           <cylinderGeometry args={[0.05, 0.05, L1, 16]} />
           <meshStandardMaterial color="hotpink" />
         </mesh>
-        <mesh position={[L1, 0, 0]}>
+        {/* Der Bob wird jetzt dragable gemacht */}
+        <mesh
+          ref={bob1Ref}
+          position={[L1, 0, 0]}
+          {...bindDrag()} // Hier werden die Drag-Events angehängt
+        >
           <sphereGeometry args={[0.15, 16, 16]} />
-          <meshStandardMaterial color="orange" />
+          <meshStandardMaterial color="orange" emissive="orange" emissiveIntensity={Math.abs(Math.sin(theta1))} />
         </mesh>
       </group>
       
@@ -58,16 +70,17 @@ function DoublePendulum({ parameters }) {
   );
 }
 
-export default function DoublePendulumScene({ parameters }) {
+export default function DoublePendulumScene({ parameters, onAngleUpdate }) {
   return (
     <Canvas camera={{ position: [5, 5, 5], fov: 50 }}>
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 10]} />
       <OrbitControls />
-      <DoublePendulum parameters={parameters} />
+      <DoublePendulum parameters={parameters} onAngleUpdate={onAngleUpdate} />
     </Canvas>
   );
 }
+
 
 
 
