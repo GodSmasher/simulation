@@ -1,4 +1,3 @@
-
 // src/DoublePendulumScene.jsx
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
@@ -18,6 +17,8 @@ function DoublePendulum({ parameters }) {
   
   const rod1Ref = useRef();
   const rod2Ref = useRef();
+  
+  // Beispiel: Ändere dynamisch den Emissive-Wert der Materialien basierend auf dem Winkel
   const emissiveIntensity1 = Math.abs(Math.sin(theta1));
   const emissiveIntensity2 = Math.abs(Math.sin(theta2));
   
@@ -73,6 +74,25 @@ function DoublePendulum({ parameters }) {
         </mesh>
       </group>
     </group>
+  );
+}
+
+export default function DoublePendulumScene({ parameters }) {
+  return (
+    <Canvas camera={{ position: [5, 5, 5], fov: 50 }}>
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 10]} />
+      <OrbitControls />
+      <DoublePendulum parameters={parameters} />
+      {/* Post-Processing: Bloom-Effekt */}
+      <EffectComposer>
+        <Bloom 
+          luminanceThreshold={0.2} 
+          luminanceSmoothing={0.9} 
+          intensity={1.5} 
+        />
+      </EffectComposer>
+    </Canvas>
   );
 }
 
