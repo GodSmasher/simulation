@@ -1,13 +1,12 @@
 // src/App.js
 import React from 'react';
-import './App.css';
-import MyChart from './MyChart';
+import DoublePendulumScene from './DoublePendulumScene';
 
 function App() {
   return (
     <div className="App">
-      <h1>Meine React App mit Chart.js</h1>
-      <MyChart />
+      <h1>3D Doppelpendel Simulation</h1>
+      <DoublePendulumScene />
     </div>
   );
 }
