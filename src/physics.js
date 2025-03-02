@@ -1,28 +1,32 @@
 // src/physics.js
 export function derivatives(state, params) {
   const { theta1, theta2, omega1, omega2 } = state;
-  const { L1, L2, m1, m2, g } = params;
+  const { L1, L2, m1, m2, g, damping } = params;
   const delta = theta2 - theta1;
 
-  // Standard-Doppelpendel-Gleichungen (Quelle: Wikipedia)
+  // Doppelpendel-Gleichungen (Basisversion, Quelle: Wikipedia)
   const denominator1 = L1 * (2 * m1 + m2 - m2 * Math.cos(2 * theta1 - 2 * theta2));
-  const domega1 = (-g * (2 * m1 + m2) * Math.sin(theta1)
+  const domega1 = (
+    -g * (2 * m1 + m2) * Math.sin(theta1)
     - m2 * g * Math.sin(theta1 - 2 * theta2)
     - 2 * Math.sin(delta) * m2 * (omega2 * omega2 * L2 + omega1 * omega1 * L1 * Math.cos(delta))
   ) / denominator1;
 
   const denominator2 = L2 * (2 * m1 + m2 - m2 * Math.cos(2 * theta1 - 2 * theta2));
-  const domega2 = (2 * Math.sin(delta) * (
-    omega1 * omega1 * L1 * (m1 + m2)
-    + g * (m1 + m2) * Math.cos(theta1)
-    + omega2 * omega2 * L2 * m2 * Math.cos(delta)
-  )) / denominator2;
+  const domega2 = (
+    2 * Math.sin(delta) * (
+      omega1 * omega1 * L1 * (m1 + m2)
+      + g * (m1 + m2) * Math.cos(theta1)
+      + omega2 * omega2 * L2 * m2 * Math.cos(delta)
+    )
+  ) / denominator2;
 
+  // Dämpfung hinzufügen (lineare Dämpfung)
   return {
     dtheta1: omega1,
     dtheta2: omega2,
-    domega1: domega1,
-    domega2: domega2,
+    domega1: domega1 - damping * omega1,
+    domega2: domega2 - damping * omega2,
   };
 }
 
@@ -60,3 +64,4 @@ export function rk4(state, dt, params) {
     omega2: state.omega2 + dt * (k1.domega2 + 2 * k2.domega2 + 2 * k3.domega2 + k4.domega2) / 6,
   };
 }
+

@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^7.1.0",
-    "@react-three/drei": "^10.0.3",
+    "@react-three/drei": "^9.122.0",
     "@react-three/fiber": "^8.18.0",
     "@react-three/postprocessing": "^2.8.1",
     "@testing-library/dom": "^10.4.0",
