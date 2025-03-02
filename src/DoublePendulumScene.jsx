@@ -1,9 +1,10 @@
+
 // src/DoublePendulumScene.jsx
 import React, { useRef, useState } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import { useDrag } from '@use-gesture/react';
-import useDoublePendulumPhysics from './useDoublePendulumPhysics';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Line } from '@react-three/drei';
+import * as THREE from 'three';
+import useDoublePendulumPhysics from './useDoublePendulumPhysics'; 
 
 function DoublePendulum({ parameters, onAngleUpdate }) {
   const {
@@ -14,24 +15,12 @@ function DoublePendulum({ parameters, onAngleUpdate }) {
   } = parameters || {};
 
   const { theta1, theta2 } = useDoublePendulumPhysics(initialTheta1, initialTheta2);
-  
+
   const rod1Ref = useRef();
   const rod2Ref = useRef();
-  const bob1Ref = useRef(); 
-  const [dragging, setDragging] = useState(false);
-  const { camera, gl, scene } = useThree();
-  const bindDrag = useDrag(({ offset: [x, y], first, last }) => {
-    if (first) {
-      setDragging(true);
-    }
-    if (last) {
-      setDragging(false);
-      const newTheta1 = Math.atan2(y, x);
-      if (onAngleUpdate) {
-      onAngleUpdate(newTheta1);
-    }
-   }
-  }, { pointerEvents: true, from: () => [0, 0] });
+  const bob2Ref = useRef();
+
+  const [points, setPoints] = useState([]);
 
   useFrame(() => {
     if (rod1Ref.current) {
@@ -41,8 +30,17 @@ function DoublePendulum({ parameters, onAngleUpdate }) {
       rod2Ref.current.position.x = L1;
       rod2Ref.current.rotation.z = theta2;
     }
+    if (bob2Ref.current) {
+      const pos = new THREE.Vector3();
+      bob2Ref.current.getWorldPosition(pos);
+      setPoints(prevPoints => {
+        const newPoints = [...prevPoints, pos.toArray()];
+        if (newPoints.length > 100) newPoints.shift();
+        return newPoints;
+      });
+    }
   });
-  
+
   return (
     <group>
       {/* Erstes Pendel: Stab und Kugel */}
@@ -51,14 +49,9 @@ function DoublePendulum({ parameters, onAngleUpdate }) {
           <cylinderGeometry args={[0.05, 0.05, L1, 16]} />
           <meshStandardMaterial color="hotpink" />
         </mesh>
-        {/* Der Bob wird jetzt dragable gemacht */}
-        <mesh
-          ref={bob1Ref}
-          position={[L1, 0, 0]}
-          {...bindDrag()} // Hier werden die Drag-Events angehängt
-        >
+        <mesh position={[L1, 0, 0]}>
           <sphereGeometry args={[0.15, 16, 16]} />
-          <meshStandardMaterial color="orange" emissive="orange" emissiveIntensity={Math.abs(Math.sin(theta1))} />
+          <meshStandardMaterial color="orange" />
         </mesh>
       </group>
       
@@ -68,11 +61,22 @@ function DoublePendulum({ parameters, onAngleUpdate }) {
           <cylinderGeometry args={[0.05, 0.05, L2, 16]} />
           <meshStandardMaterial color="skyblue" />
         </mesh>
-        <mesh position={[L2, 0, 0]}>
+        <mesh ref={bob2Ref} position={[L2, 0, 0]}>
           <sphereGeometry args={[0.15, 16, 16]} />
           <meshStandardMaterial color="limegreen" />
         </mesh>
       </group>
+      
+      {/* Trail-Linie */}
+      {points.length > 1 && (
+        <Line
+          points={points} // Array von 3D-Punkten
+          color="white"
+          lineWidth={1}
+          transparent
+          opacity={0.7}
+        />
+      )}
     </group>
   );
 }
