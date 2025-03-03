@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+# 3D Doppelpendel Simulation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Dieses Projekt demonstriert eine interaktive 3D-Simulation eines Doppelpendels. Die Anwendung kombiniert moderne Webtechnologien, um physikalische Dynamiken in Echtzeit zu visualisieren, Simulationsergebnisse zu speichern und statistische Daten grafisch darzustellen.
 
-## Available Scripts
+## Inhaltsverzeichnis
 
-In the project directory, you can run:
+- [Überblick](#überblick)
+- [Features](#features)
+- [Technologien](#technologien)
+- [Installation und Setup](#installation-und-setup)
+- [Verwendung](#verwendung)
+- [Backend API](#backend-api)
+- [Deployment](#deployment)
+- [Ausblick](#ausblick)
+- [Lizenz](#lizenz)
 
-### `npm start`
+## Überblick
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+In dieser Anwendung wird ein Doppelpendel in einer 3D-Umgebung simuliert. Der Benutzer kann Parameter wie Längen, Massen, Startwinkel, Dämpfung und Simulationsgeschwindigkeit über ein interaktives Formular anpassen. Die Simulation wird in Echtzeit visualisiert, während Diagramme den Verlauf der Winkel und der Gesamtenergie anzeigen. Außerdem werden Simulationsergebnisse in einer MongoDB-Datenbank gespeichert, sodass vergangene Läufe verglichen werden können.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+- **3D-Visualisierung:**  
+  Darstellung eines Doppelpendels mit realitätsnahen physikalischen Berechnungen (RK4-Integration) mittels [React Three Fiber](https://github.com/pmndrs/react-three-fiber).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Interaktive Steuerung:**  
+  Anpassung von Simulationsparametern (Längen, Massen, Dämpfung, Startwinkel, Simulationsgeschwindigkeit) über ein benutzerfreundliches Formular.
 
-### `npm run build`
+- **Dynamische Diagramme:**  
+  Anzeige von Echtzeit-Daten (Winkelverlauf und Energieverlauf) mit [Chart.js](https://www.chartjs.org/) und [react-chartjs-2](https://github.com/reactchartjs/react-chartjs-2).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Simulation speichern:**  
+  Speicherung des aktuellen Simulationslaufs über einen Reset-Button; vergangene Simulationen werden unten in einer Übersicht angezeigt.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Backend Integration:**  
+  Verwendung von Node.js, Express und Mongoose zur Bereitstellung einer RESTful API und Speicherung der Daten in MongoDB Atlas.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Technologien
 
-### `npm run eject`
+- **Frontend:**  
+  - React  
+  - React Three Fiber (3D-Rendering)  
+  - React Chartjs 2 & Chart.js (Diagramme)  
+  - HTML/CSS
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **Backend:**  
+  - Node.js  
+  - Express  
+  - Mongoose
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Datenbank:**  
+  - MongoDB Atlas
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- **Weitere Tools:**  
+  - Git & GitHub  
+  - Deployment-Services (z. B. Vercel/Netlify für das Frontend und Heroku/Render für das Backend)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Installation und Setup
 
-## Learn More
+### Voraussetzungen
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Node.js (empfohlen: LTS-Version)
+- npm (wird mit Node.js mitgeliefert)
+- Git (optional, für Versionskontrolle)
+- Ein MongoDB Atlas Account oder eine lokale MongoDB-Installation
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
