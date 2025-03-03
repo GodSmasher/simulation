@@ -28,6 +28,34 @@
   margin-bottom: 20px;
 }
 
+.runs-container {
+  width: 80%;
+  max-width: 800px;
+  margin: 20px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.chart-container {
+  width: 80%;
+  max-width: 800px;
+  margin: 20px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.run {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+.run:last-child {
+  border-bottom: none;
+}
 .controls {
   margin-bottom: 20px;
 }
