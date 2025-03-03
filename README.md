@@ -8,12 +8,7 @@ Dieses Projekt demonstriert eine interaktive 3D-Simulation eines Doppelpendels. 
 - [Features](#features)
 - [Technologien](#technologien)
 - [Installation und Setup](#installation-und-setup)
-- [Verwendung](#verwendung)
-- [Backend API](#backend-api)
-- [Deployment](#deployment)
-- [Ausblick](#ausblick)
-- [Lizenz](#lizenz)
-
+  
 ## Überblick
 
 In dieser Anwendung wird ein Doppelpendel in einer 3D-Umgebung simuliert. Der Benutzer kann Parameter wie Längen, Massen, Startwinkel, Dämpfung und Simulationsgeschwindigkeit über ein interaktives Formular anpassen. Die Simulation wird in Echtzeit visualisiert, während Diagramme den Verlauf der Winkel und der Gesamtenergie anzeigen. Außerdem werden Simulationsergebnisse in einer MongoDB-Datenbank gespeichert, sodass vergangene Läufe verglichen werden können.
